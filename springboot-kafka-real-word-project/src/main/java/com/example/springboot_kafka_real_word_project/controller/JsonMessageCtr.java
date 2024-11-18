@@ -13,5 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/kafka")
 
 public class JsonMessageCtr {
+    private final JsonKafkaProducer jsonKafkaProducer;
 
+    public JsonMessageCtr(JsonKafkaProducer jsonKafkaProducer) {
+        this.jsonKafkaProducer = jsonKafkaProducer;
+    }
+
+    @PostMapping("/push")
+    public ResponseEntity<String> push(@RequestBody User user) {
+        jsonKafkaProducer.sendMessage(user);
+        return ResponseEntity.ok("Json message sent to kafka topic");
+    }
 }
